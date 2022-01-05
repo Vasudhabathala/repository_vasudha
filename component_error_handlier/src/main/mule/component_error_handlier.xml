@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd">
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="fc6aaf24-e67d-4f89-8456-ded4cfea5051" >
+		<http:listener-connection host="0.0.0.0" port="8081" />
+	</http:listener-config>
+	<flow name="component_error_handlierFlow" doc:id="9fc9aa39-2172-4b3a-8c44-13d3f7aebce6" >
+		<http:listener doc:name="Listener" doc:id="638dfaec-8444-4be1-b1a3-7405d41e5ad5" config-ref="HTTP_Listener_config" path="/component"/>
+		<set-payload value='#["hello"]' doc:name="Set Payload" doc:id="afcc0cce-bb0a-409b-94e2-8a02e650e5f3" />
+		<choice doc:name="Choice" doc:id="84318f95-6c9b-4aa1-9c87-ee5dac64ca0e" >
+			<when expression="#[isEmpty(payload)]">
+				<raise-error doc:name="Raise error" doc:id="753efc03-6b0e-4764-aa5d-a1411fa3678c" type="NO:PAYLOAD" description="NO DATA IN PAYLOAD"/>
+			</when>
+			<otherwise >
+				<set-payload value="payload is not empty" doc:name="Set Payload" doc:id="bf87ad01-0157-4acb-8b6a-d4a2d05ef657" />
+			</otherwise>
+		</choice>
+		<error-handler >
+			<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="531210b2-4fe0-453f-a5a2-dba2b3bd68a2" type="NO:PAYLOAD">
+				<set-payload value="FGHGFJHGKH" doc:name="Set Payload" doc:id="5a2f9ee8-a537-486b-b5c2-7df505a1fec1" />
+			</on-error-propagate>
+		</error-handler>
+	</flow>
+</mule>
